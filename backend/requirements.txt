@@ -1,0 +1,22 @@
+# Django Core
+Django>=4.2,<5.0
+djangorestframework>=3.14
+django-cors-headers>=4.3
+python-dotenv>=1.0
+gunicorn>=21.2
+
+# RabbitMQ
+pika>=1.3
+
+# Video Processing
+opencv-python-headless>=4.8
+numpy>=1.24
+Pillow>=10.0
+
+# YOLO for Fire/Smoke Detection
+ultralytics>=8.0
+torch>=2.0
+torchvision>=0.15
+
+# Utilities
+python-dateutil>=2.8

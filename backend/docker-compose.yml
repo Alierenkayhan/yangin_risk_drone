@@ -1,0 +1,108 @@
+version: '3.8'
+
+# ═══════════════════════════════════════════════
+# Tüm konfigürasyon .env dosyasından okunur.
+# Kurulum: cp ../.env.example ../.env && düzenle
+# ═══════════════════════════════════════════════
+
+services:
+  # ──────────────────────────────────────────────
+  #  RabbitMQ — Message Broker + Web STOMP
+  # ──────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: dronecommand-rabbitmq
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+      - "${RABBITMQ_STOMP_PORT:-15674}:15674"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  # ──────────────────────────────────────────────
+  #  PostgreSQL (opsiyonel — DATABASE_ENGINE'e göre)
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: dronecommand-postgres
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - postgres
+
+  # ──────────────────────────────────────────────
+  #  Django Backend — Registration API + Read Endpoints
+  # ──────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dronecommand-backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    env_file:
+      - ../.env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - DATABASE_HOST=postgres
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - backend_db:/app/db.sqlite3
+      - ./detection/models:/app/detection/models
+      - backend_media:/app/media
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             gunicorn dronecommand.wsgi:application
+               -b 0.0.0.0:8000
+               --workers ${BACKEND_WORKERS:-2}
+               --timeout 120"
+
+  # ──────────────────────────────────────────────
+  #  RabbitMQ Consumer — Telemetry, Video, YOLO Detection
+  # ──────────────────────────────────────────────
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dronecommand-consumer
+    env_file:
+      - ../.env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - DATABASE_HOST=postgres
+    depends_on:
+      - backend
+      - rabbitmq
+    volumes:
+      - backend_db:/app/db.sqlite3
+      - ./detection/models:/app/detection/models
+      - backend_media:/app/media
+    command: python manage.py run_consumer
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+  backend_db:
+  backend_media:

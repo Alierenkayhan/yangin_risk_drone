@@ -1,0 +1,7 @@
+{
+  "name": "DroneCommand AI",
+  "description": "Advanced drone fleet management interface with real-time environmental analysis and grid-based topology scanning.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
