@@ -1,0 +1,104 @@
+# ═══════════════════════════════════════════════
+# DroneCommand AI — Root .gitignore
+# ═══════════════════════════════════════════════
+
+# ── Ortam Değişkenleri (hassas bilgiler) ──────
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+!.env.example
+!backend/.env.example
+!frontend/.env.example
+!raspberry_pi/.env.example
+
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+venv/
+.venv/
+env/
+.Python
+develop-eggs/
+.installed.cfg
+
+# ── Django ────────────────────────────────────
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+*.log
+
+# ── Node.js ───────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+.npm
+.yarn/
+.pnp.*
+
+# ── YOLO Model Dosyaları ─────────────────────
+*.pt
+*.onnx
+*.engine
+*.tflite
+!backend/detection/models/.gitkeep
+
+# ── IDE / Editor ──────────────────────────────
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# ── OS ────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ── Docker ────────────────────────────────────
+docker-compose.override.yml
+
+# ── Paket Arşivleri ──────────────────────────
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ── Test / Coverage ──────────────────────────
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# ── Raspberry Pi ──────────────────────────────
+raspberry_pi/config/.env
+raspberry_pi/logs/

@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════
+# DroneCommand AI — Raspberry Pi .gitignore
+# Drone Client (Python)
+# ═══════════════════════════════════════════════
+
+# ── Ortam Değişkenleri (API key, şifre) ──────
+config/.env
+!config/.env.example
+
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.venv/
+*.egg
+*.egg-info/
+
+# ── Log Dosyaları ─────────────────────────────
+logs/
+*.log
+
+# ── Sensör Verileri / Kayıtlar ───────────────
+recordings/
+captures/
+frames/
+*.jpg
+*.png
+*.mp4
+*.avi
+
+# ── GPS Kayıtları ────────────────────────────
+*.gpx
+*.nmea
+
+# ── IDE ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ────────────────────────────────────────
+.DS_Store
+Thumbs.db

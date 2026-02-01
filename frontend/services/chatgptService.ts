@@ -36,7 +36,7 @@ function buildRequestBody(messages: ChatMessage[], maxTokens: number) {
   if (isReasoningModel) {
     body.max_completion_tokens = maxTokens;
   } else {
-    body.max_completion_tokens = maxTokens;
+    body.max_tokens = maxTokens;
     body.temperature = 0.7;
   }
 

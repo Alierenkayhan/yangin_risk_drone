@@ -1,0 +1,24 @@
+[Unit]
+Description=DroneCommand AI — Drone Client
+Documentation=https://github.com/your-repo/dronecommand
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+Group=__USER__
+WorkingDirectory=__INSTALL_DIR__
+ExecStart=__INSTALL_DIR__/venv/bin/python drone_client.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Ortam değişkenleri .env'den okunur,
+# ama burada da override edebilirsiniz:
+# Environment=DRONE_ID=D-01
+# Environment=LOG_LEVEL=DEBUG
+
+[Install]
+WantedBy=multi-user.target

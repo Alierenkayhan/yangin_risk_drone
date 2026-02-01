@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════
+# DroneCommand AI — Backend .gitignore
+# Django + Python + YOLO Detection
+# ═══════════════════════════════════════════════
+
+# ── Ortam Değişkenleri ────────────────────────
+.env
+.env.local
+.env.production
+!.env.example
+
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+*.whl
+
+# ── Django ────────────────────────────────────
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+*.log
+
+# ── Django Migrations ─────────────────────────
+# İlk migration'ı tut, geri kalanını ignore etme
+# (migration'lar repo'da tutulmalı — bu sadece not)
+
+# ── YOLO Model Dosyaları (büyük dosyalar) ────
+detection/models/*.pt
+detection/models/*.onnx
+detection/models/*.engine
+detection/models/*.tflite
+!detection/models/.gitkeep
+
+# ── YOLO Çıktıları ───────────────────────────
+runs/
+detect/
+labels/
+
+# ── Video/Frame Çıktıları ────────────────────
+frames/
+output/
+*.mp4
+*.avi
+*.mkv
+
+# ── Docker ────────────────────────────────────
+docker-compose.override.yml
+
+# ── IDE ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Test / Coverage ──────────────────────────
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
